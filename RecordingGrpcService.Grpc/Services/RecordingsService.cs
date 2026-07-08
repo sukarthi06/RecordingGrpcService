@@ -52,4 +52,11 @@ public class RecordingsService(
         var result = await recordingService.UpdateStoragePathAsync(recordingId, request.StoragePath, context.CancellationToken);
         return new UpdateStoragePathResponse { IsSuccess = result };
     }
+    public override async Task<UpdateWavPathResponse> UpdateWavPath(UpdateWavPathRequest request,
+        ServerCallContext context)
+    {
+        var recordingId = mapper.MapRecordingId(request.RecordingId);
+        var result = await recordingService.UpdateWavPathAsync(recordingId, request.WavPath, context.CancellationToken);
+        return new UpdateWavPathResponse { IsSuccess = result };
+    }
 }

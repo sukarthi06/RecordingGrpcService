@@ -39,4 +39,9 @@ public class RecordingService(
     {
         return await recordingRepo.UpdateStoragePathAsync(recordingId, storagePath, cancellationToken);
     }
+
+    public async Task<bool> UpdateWavPathAsync(RecordingId recordingId, string wavPath, CancellationToken cancellationToken = default)
+    {
+        return await recordingRepo.UpdateWavPathAsync(recordingId, wavPath, cancellationToken);
+    }
 }

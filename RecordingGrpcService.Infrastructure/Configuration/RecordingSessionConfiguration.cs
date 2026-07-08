@@ -29,6 +29,9 @@ public sealed class RecordingSessionConfiguration
         builder.Property(x => x.StoragePath)
             .HasMaxLength(500);
 
+        builder.Property(x => x.WavPath)
+            .HasMaxLength(500);
+
         builder.OwnsOne(x => x.RecordingMetadata, metadata =>
         {
             metadata.Property(m => m.SampleRate).HasColumnName("SampleRate");

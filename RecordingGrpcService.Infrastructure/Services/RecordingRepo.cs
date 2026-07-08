@@ -91,7 +91,8 @@ public class RecordingRepo(
             .FirstOrDefaultAsync(rs => rs.RecordingId == recordingId, cancellationToken);
         if (recordingSession == null)
         {
-            logger.LogWarning("Recording session not found for RecordingId: {RecordingId} in database", recordingId);
+            logger.LogWarning("Recording session not found for RecordingId: {RecordingId} in database while updating storage path",
+                recordingId);
             return false;
         }
 
@@ -105,6 +106,30 @@ public class RecordingRepo(
             return false;
         }
         logger.LogInformation("Storage path updated for RecordingId: {RecordingId} in database", recordingId);
+        return true;
+    }
+
+    public async Task<bool> UpdateWavPathAsync(RecordingId recordingId, string wavPath, CancellationToken cancellationToken = default)
+    {
+        var recordingSession = await dbContext.RecordingSessions
+            .FirstOrDefaultAsync(rs => rs.RecordingId == recordingId, cancellationToken);
+
+        if (recordingSession == null)
+        {
+            logger.LogWarning("Recording session not found for RecordingId: {RecordingId} in database while updating wav path",
+                recordingId);
+            return false;
+        }
+
+        recordingSession.WavPath = wavPath;
+        recordingSession.LastModifiedAt = DateTime.UtcNow;
+        var result = await dbContext.SaveChangesAsync(cancellationToken);
+        if (result == 0)
+        {
+            logger.LogWarning("Failed to update wav path for RecordingId: {RecordingId} in database", recordingId);
+            return false;
+        }
+        logger.LogInformation("Wav path updated for RecordingId: {RecordingId} in database", recordingId);
         return true;
     }
 }

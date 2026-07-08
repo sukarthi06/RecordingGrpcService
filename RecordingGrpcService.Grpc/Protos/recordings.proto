@@ -12,6 +12,7 @@ service RecordingService {
   rpc UpdateRecordingSession (UpdateRecordingSessionRequest) returns (UpdateRecordingSessionResponse);
   rpc UpdateRecordingMetadata (UpdateRecordingMetadataRequest) returns (UpdateRecordingMetadataResponse);
   rpc UpdateStoragePath (UpdateStoragePathRequest) returns (UpdateStoragePathResponse);
+  rpc UpdateWavPath (UpdateWavPathRequest) returns (UpdateWavPathResponse);
 }
 
 message RecordingSessionRequest {
@@ -58,6 +59,15 @@ message UpdateStoragePathResponse {
   bool is_success = 1;
 }
 
+message UpdateWavPathRequest {
+  string recording_id = 1;
+  string wav_path = 2;
+}
+
+message UpdateWavPathResponse {
+  bool is_success = 1;
+}
+
 message RecordingIdDto {
   string recording_id = 1;
 }
@@ -83,5 +93,6 @@ message RecordingSessionDto {
   google.protobuf.Timestamp started_at = 3;
   google.protobuf.Timestamp stopped_at = 4;
   string storage_path = 5;
-  RecordingMetadataDto metadata = 6;
+  string wav_path = 6;
+  RecordingMetadataDto metadata = 7;
 }
