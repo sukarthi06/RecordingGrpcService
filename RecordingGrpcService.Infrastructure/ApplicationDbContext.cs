@@ -6,6 +6,7 @@ namespace RecordingGrpcService.Infrastructure;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
     public DbSet<RecordingSession> RecordingSessions { get; set; } = default!;
+    public DbSet<RecordingChunk> RecordingChunks { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

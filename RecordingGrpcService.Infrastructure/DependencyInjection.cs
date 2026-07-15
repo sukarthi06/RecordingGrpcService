@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using RecordingGrpcService.Infrastructure.Interfaces;
 using RecordingGrpcService.Infrastructure.Services;
 using Serilog;
@@ -25,9 +26,17 @@ public static class DependencyInjection
                         maxRetryDelay: TimeSpan.FromSeconds(10),
                         errorCodesToAdd: null);
                 });
+
+            if (configuration.GetValue<bool>("Logging:LogEfSql"))
+            {
+                options
+                    .EnableDetailedErrors()
+                    .EnableSensitiveDataLogging();
+            }
         });
 
         services.AddScoped<IRecordingRepo, RecordingRepo>();
+        services.AddScoped<IRecordingChunkRepo, RecordingChunkRepo>();
 
         return services;
     }

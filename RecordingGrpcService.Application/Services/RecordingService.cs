@@ -10,7 +10,13 @@ public class RecordingService(
     ILogger<RecordingService> logger,
     IRecordingRepo recordingRepo) : IRecordingService
 {
-    public async Task<RecordingSession?> GetRecordingSessionAsync(RecordingId recordingId, CancellationToken cancellationToken = default)
+    public async Task<RecordingMetadata> GetRecordingMetadataAsync(RecordingId recordingId, CancellationToken cancellationToken)
+    {
+        var recordingSession = await recordingRepo.GetRecordingSessionAsync(recordingId, cancellationToken);
+        return recordingSession?.RecordingMetadata ?? new RecordingMetadata(0, 0, 0, string.Empty);
+    }
+
+    public async Task<RecordingSession?> GetRecordingSessionAsync(RecordingId recordingId, CancellationToken cancellationToken)
     {
         if(RecordingId.Empty(recordingId.Value))
         {
@@ -20,27 +26,27 @@ public class RecordingService(
         return await recordingRepo.GetRecordingSessionAsync(recordingId, cancellationToken);
     }
 
-    public async Task<RecordingSession> SaveRecordingSessionAsync(RecordingSession recordingSession, CancellationToken cancellationToken = default)
+    public async Task<RecordingSession> SaveRecordingSessionAsync(RecordingSession recordingSession, CancellationToken cancellationToken)
     {
         return await recordingRepo.SaveRecordingSessionAsync(recordingSession, cancellationToken);
     }
 
-    public async Task<bool> UpdateRecordingMetadataAsync(RecordingId recordingId, RecordingMetadata metadata, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateRecordingMetadataAsync(RecordingId recordingId, RecordingMetadata metadata, CancellationToken cancellationToken)
     {
         return await recordingRepo.UpdateRecordingMetadataAsync(recordingId, metadata, cancellationToken);
     }
 
-    public async Task<bool> UpdateRecordingSessionAsync(RecordingSession recordingSession, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateRecordingSessionAsync(RecordingSession recordingSession, CancellationToken cancellationToken)
     {
         return await recordingRepo.UpdateRecordingSessionAsync(recordingSession, cancellationToken);
     }
 
-    public async Task<bool> UpdateStoragePathAsync(RecordingId recordingId, string storagePath, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateStoragePathAsync(RecordingId recordingId, string storagePath, CancellationToken cancellationToken)
     {
         return await recordingRepo.UpdateStoragePathAsync(recordingId, storagePath, cancellationToken);
     }
 
-    public async Task<bool> UpdateWavPathAsync(RecordingId recordingId, string wavPath, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateWavPathAsync(RecordingId recordingId, string wavPath, CancellationToken cancellationToken)
     {
         return await recordingRepo.UpdateWavPathAsync(recordingId, wavPath, cancellationToken);
     }

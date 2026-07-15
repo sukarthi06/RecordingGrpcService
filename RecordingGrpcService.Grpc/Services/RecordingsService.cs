@@ -59,4 +59,11 @@ public class RecordingsService(
         var result = await recordingService.UpdateWavPathAsync(recordingId, request.WavPath, context.CancellationToken);
         return new UpdateWavPathResponse { IsSuccess = result };
     }
+    public override async Task<GetRecordingMetadataResponse> GetRecordingMetadata(GetRecordingMetadataRequest request,
+        ServerCallContext context)
+    {
+        var recordingId = mapper.MapRecordingId(request.RecordingId);
+        var result = await recordingService.GetRecordingMetadataAsync(recordingId, context.CancellationToken);
+        return new GetRecordingMetadataResponse { Metadata = mapper.ToDto(result) };
+    }
 }

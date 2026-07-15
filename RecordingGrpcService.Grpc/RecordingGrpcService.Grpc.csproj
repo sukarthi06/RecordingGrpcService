@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\recordingchunk.proto" />
     <None Remove="Protos\recordings.proto" />
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\recordingchunk.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\recordings.proto" GrpcServices="Server" />
   </ItemGroup>
 
