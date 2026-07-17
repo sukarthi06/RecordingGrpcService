@@ -10,4 +10,5 @@ public interface IRecordingChunkService
     Task<bool> UpdateStoragePathAsync(ChunkId chunkId, string storagePath, CancellationToken cancellationToken);
     Task<List<RecordingChunk>> GetSubsequentRecordingChunksAsync(ChunkId chunkId, CancellationToken cancellationToken);
     Task<bool> UpdateWavPathAsync(ChunkId chunkId, string wavStoragePath, CancellationToken cancellationToken);
+    Task<bool> UpdateTranscriptPath(ChunkId chunkId, string transcriptStoragePath, CancellationToken cancellationToken);
 }

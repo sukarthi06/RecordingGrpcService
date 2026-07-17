@@ -53,6 +53,10 @@ namespace RecordingGrpcService.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<string>("TranscriptPath")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
                     b.Property<string>("WavPath")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");

@@ -15,7 +15,9 @@ public partial class RecordingChunkMapper : MapperBase
     [MapperIgnoreTarget(nameof(RecordingChunk.LastModifiedBy))]
     [MapperIgnoreTarget(nameof(RecordingChunk.RecordStatus))]
     [MapperIgnoreSource(nameof(RecordingChunkDto.HasWavPath))]
+    [MapperIgnoreSource(nameof(RecordingChunkDto.HasTranscriptPath))]
     public partial RecordingChunk ToDomain(RecordingChunkDto dto);
+
     [MapperIgnoreSource(nameof(RecordingChunk.CreatedAt))]
     [MapperIgnoreSource(nameof(RecordingChunk.CreatedBy))]
     [MapperIgnoreSource(nameof(RecordingChunk.LastModifiedAt))]

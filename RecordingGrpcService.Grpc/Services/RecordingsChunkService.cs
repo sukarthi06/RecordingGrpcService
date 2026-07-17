@@ -49,17 +49,20 @@ public class RecordingsChunkService(
         }
         return response;
     }
-    public override async Task<UpdateRecordingChunkWavResponse> UpdateRecordingChunkWav(UpdateRecordingChunkWavRequest request, ServerCallContext context)
+    public override async Task<UpdateRecordingChunkWavResponse> UpdateRecordingChunkWav(
+        UpdateRecordingChunkWavRequest request, ServerCallContext context)
     {
         var chunkId = mapper.MapChunkId(request.ChunkId);
         var wavStoragePath = request.WavPath;
-
         var response = await recordingChunkService.UpdateWavPathAsync(chunkId, wavStoragePath, context.CancellationToken);
-        if (response)
-            logger.LogInformation("Wav storage path updated for ChunkId: {ChunkId}", chunkId);
-        else
-            logger.LogInformation("Wav storage path update failed for ChunkId: {ChunkId}", chunkId);
-
         return new UpdateRecordingChunkWavResponse { IsSuccess = response };
+    }
+    public override async Task<UpdateRecordingChunkTranscriptPathResponse> UpdateRecordingChunkTranscriptPath(
+        UpdateRecordingChunkTranscriptPathRequest request, ServerCallContext context)
+    {        
+        var chunkId = mapper.MapChunkId(request.ChunkId);
+        var transcriptStoragePath = request.TranscriptPath;
+        var response = await recordingChunkService.UpdateTranscriptPath(chunkId, transcriptStoragePath, context.CancellationToken);
+        return new UpdateRecordingChunkTranscriptPathResponse { IsSuccess = response };
     }
 }

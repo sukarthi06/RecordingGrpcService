@@ -10,4 +10,5 @@ public class RecordingChunk : Entity
     public int SequenceNumber { get; set; } = default!;
     public string StoragePath { get; set; } = default!;
     public string? WavPath { get; set; }
+    public string? TranscriptPath { get; set; }
 }

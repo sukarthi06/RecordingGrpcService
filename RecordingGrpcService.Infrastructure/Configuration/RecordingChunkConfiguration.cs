@@ -34,6 +34,9 @@ public sealed class RecordingChunkConfiguration
         builder.Property(x => x.WavPath)
             .HasMaxLength(500);
 
+        builder.Property(x => x.TranscriptPath)
+            .HasMaxLength(500);
+
         // Inherited properties
         builder.Property(x => x.CreatedAt)
             .IsRequired();

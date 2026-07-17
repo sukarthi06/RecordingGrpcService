@@ -15,10 +15,18 @@ public class RecordingChunkRepo(
         var recordingChunks = await dbContext.RecordingChunks
             .AsNoTracking()
             .Where(rc => rc.ChunkId == chunkId)
+            .Select(rc => new RecordingChunk
+            {
+                ChunkId = rc.ChunkId,
+                RecordingId = rc.RecordingId,
+                SequenceNumber = rc.SequenceNumber,
+                StoragePath = rc.StoragePath,
+                WavPath = rc.WavPath ?? string.Empty,
+                TranscriptPath = rc.TranscriptPath ?? string.Empty
+            })
             .FirstOrDefaultAsync(cancellationToken);
         return recordingChunks;
     }
-
     public async Task<List<RecordingChunk>> GetSubsequentRecordingChunksAsync(ChunkId chunkId, CancellationToken cancellationToken)
     {
         var chunks = await dbContext.RecordingChunks
@@ -37,12 +45,12 @@ public class RecordingChunkRepo(
                 SequenceNumber = rc.SequenceNumber,
                 StoragePath = rc.StoragePath,
                 WavPath = rc.WavPath ?? string.Empty,
+                TranscriptPath = rc.TranscriptPath ?? string.Empty
             })
             .ToListAsync(cancellationToken);
 
         return chunks;
     }
-
     public async Task<bool> SaveRecordingChunkAsync(RecordingChunk recordingChunk, CancellationToken cancellationToken)
     {
         await dbContext.RecordingChunks.AddAsync(recordingChunk, cancellationToken);
@@ -55,7 +63,6 @@ public class RecordingChunkRepo(
         }
         return true;
     }
-
     public async Task<bool> UpdateStoragePathAsync(ChunkId chunkId, string storagePath, CancellationToken cancellationToken)
     {
         var existingChunk = await dbContext.RecordingChunks.FindAsync(chunkId, cancellationToken);
@@ -66,6 +73,28 @@ public class RecordingChunkRepo(
         }
 
         existingChunk.StoragePath = storagePath;
+        existingChunk.LastModifiedAt = DateTime.UtcNow;
+        var result = await dbContext.SaveChangesAsync(cancellationToken);
+
+        if (result <= 0)
+        {
+            logger.LogError("Failed to update storage path for recording chunk with ChunkId: {ChunkId}", chunkId);
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task<bool> UpdateTranscriptPathAsync(ChunkId chunkId, string transcriptStoragePath, CancellationToken cancellationToken)
+    {
+        var existingChunk = await dbContext.RecordingChunks.FindAsync(chunkId, cancellationToken);
+        if (existingChunk == null)
+        {
+            logger.LogWarning("Recording chunk with ChunkId: {ChunkId} not found", chunkId);
+            return false;
+        }
+
+        existingChunk.TranscriptPath = transcriptStoragePath;
         existingChunk.LastModifiedAt = DateTime.UtcNow;
         var result = await dbContext.SaveChangesAsync(cancellationToken);
 

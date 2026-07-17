@@ -37,8 +37,23 @@ public class RecordingChunkService(
         return await recordingChunkRepo.UpdateStoragePathAsync(chunkId, storagePath, cancellationToken);
     }
 
+    public async Task<bool> UpdateTranscriptPath(ChunkId chunkId, string transcriptStoragePath, CancellationToken cancellationToken)
+    {
+        var response = await recordingChunkRepo.UpdateTranscriptPathAsync(chunkId, transcriptStoragePath, cancellationToken);
+        if (response)
+            logger.LogInformation("Transcript storage path updated for ChunkId: {ChunkId}", chunkId);
+        else
+            logger.LogInformation("Transcript storage path update failed for ChunkId: {ChunkId}", chunkId);
+        return response;
+    }
+
     public async Task<bool> UpdateWavPathAsync(ChunkId chunkId, string wavStoragePath, CancellationToken cancellationToken)
     {
-        return await recordingChunkRepo.UpdateWavPathAsync(chunkId, wavStoragePath, cancellationToken);
+        var response = await recordingChunkRepo.UpdateWavPathAsync(chunkId, wavStoragePath, cancellationToken);
+        if (response)
+            logger.LogInformation("Wav storage path updated for ChunkId: {ChunkId}", chunkId);
+        else
+            logger.LogInformation("Wav storage path update failed for ChunkId: {ChunkId}", chunkId);
+        return response;
     }
 }
