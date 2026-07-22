@@ -31,7 +31,8 @@ public class RecordingService(
         return await recordingRepo.SaveRecordingSessionAsync(recordingSession, cancellationToken);
     }
 
-    public async Task<bool> UpdateRecordingMetadataAsync(RecordingId recordingId, RecordingMetadata metadata, CancellationToken cancellationToken)
+    public async Task<bool> UpdateRecordingMetadataAsync(
+        RecordingId recordingId, RecordingMetadata metadata, CancellationToken cancellationToken)
     {
         return await recordingRepo.UpdateRecordingMetadataAsync(recordingId, metadata, cancellationToken);
     }
@@ -44,6 +45,12 @@ public class RecordingService(
     public async Task<bool> UpdateStoragePathAsync(RecordingId recordingId, string storagePath, CancellationToken cancellationToken)
     {
         return await recordingRepo.UpdateStoragePathAsync(recordingId, storagePath, cancellationToken);
+    }
+
+    public async Task<bool> UpdateTranscriptPathAsync(
+        RecordingId recordingId, string transcriptPath, CancellationToken cancellationToken)
+    {
+        return await recordingRepo.UpdateTranscriptPathAsync(recordingId, transcriptPath, cancellationToken);
     }
 
     public async Task<bool> UpdateWavPathAsync(RecordingId recordingId, string wavPath, CancellationToken cancellationToken)

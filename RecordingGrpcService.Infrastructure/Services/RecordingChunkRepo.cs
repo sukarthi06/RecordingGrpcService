@@ -27,6 +27,25 @@ public class RecordingChunkRepo(
             .FirstOrDefaultAsync(cancellationToken);
         return recordingChunks;
     }
+
+    public async Task<List<RecordingChunk>?> GetRecordingChunksAsync(RecordingId recordingId, CancellationToken cancellationToken)
+    {
+        var recordingChunks = await dbContext.RecordingChunks
+            .AsNoTracking()
+            .Where(rc => rc.RecordingId == recordingId)
+            .Select(rc => new RecordingChunk
+            {
+                ChunkId = rc.ChunkId,
+                RecordingId = rc.RecordingId,
+                SequenceNumber = rc.SequenceNumber,
+                StoragePath = rc.StoragePath,
+                WavPath = rc.WavPath ?? string.Empty,
+                TranscriptPath = rc.TranscriptPath ?? string.Empty
+            })
+            .ToListAsync(cancellationToken);
+        return recordingChunks;
+    }
+
     public async Task<List<RecordingChunk>> GetSubsequentRecordingChunksAsync(ChunkId chunkId, CancellationToken cancellationToken)
     {
         var chunks = await dbContext.RecordingChunks
@@ -51,6 +70,17 @@ public class RecordingChunkRepo(
 
         return chunks;
     }
+
+    public async Task<bool> IsChunksTranscriptCompletedAsync(RecordingId recordingId, CancellationToken cancellationToken)
+    {
+        var result = await dbContext.RecordingChunks
+            .AsNoTracking()
+            .Where(rc => rc.RecordingId == recordingId
+                && (rc.TranscriptPath == null || rc.TranscriptPath == string.Empty))
+            .CountAsync(cancellationToken);                            
+        return result == 0;
+    }
+
     public async Task<bool> SaveRecordingChunkAsync(RecordingChunk recordingChunk, CancellationToken cancellationToken)
     {
         await dbContext.RecordingChunks.AddAsync(recordingChunk, cancellationToken);

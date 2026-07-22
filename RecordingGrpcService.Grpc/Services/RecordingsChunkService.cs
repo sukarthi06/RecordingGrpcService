@@ -65,4 +65,22 @@ public class RecordingsChunkService(
         var response = await recordingChunkService.UpdateTranscriptPath(chunkId, transcriptStoragePath, context.CancellationToken);
         return new UpdateRecordingChunkTranscriptPathResponse { IsSuccess = response };
     }
+    public override async Task<IsChunksReadyResponse> IsChunksReadyForConsolidation(
+        IsChunksReadyRequest request, ServerCallContext context)
+    {
+        var response = await recordingChunkService
+            .IsChunksReadyForConsolidationAsync(mapper.MapRecordingId(request.RecordingId), context.CancellationToken);
+        return new IsChunksReadyResponse { IsSuccess = response };
+    }
+    public override async Task<GetRecordingChunksResponse> GetRecordingChunks(GetRecordingChunksRequest request,
+        ServerCallContext context)
+    {
+        var chunks = await recordingChunkService.GetRecordingChunksAsync(
+            mapper.MapRecordingId(request.RecordingId), context.CancellationToken);
+
+        var response = new GetRecordingChunksResponse();
+        if (chunks is not null) response.RecordingChunks.AddRange(mapper.ToDtoList(chunks));
+
+        return response;
+    }
 }

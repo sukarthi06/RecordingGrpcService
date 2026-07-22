@@ -8,6 +8,7 @@ namespace RecordingGrpcService.Application.Services;
 
 public class RecordingChunkService(
     IRecordingChunkRepo recordingChunkRepo,
+    IRecordingRepo recordingRepo,
     ILogger<RecordingChunkService> logger) : IRecordingChunkService
 {
     public async Task<RecordingChunk?> GetRecordingChunkAsync(ChunkId chunkId, CancellationToken cancellationToken = default)
@@ -21,10 +22,25 @@ public class RecordingChunkService(
         return await recordingChunkRepo.GetRecordingChunkAsync(chunkId, cancellationToken);
     }
 
+    public async Task<List<RecordingChunk>> GetRecordingChunksAsync(RecordingId recording, CancellationToken cancellationToken)
+    {
+        var chunks = await recordingChunkRepo.GetRecordingChunksAsync(recording, cancellationToken);
+        return chunks is null ? [] : chunks;
+    }
+
     public async Task<List<RecordingChunk>> GetSubsequentRecordingChunksAsync(ChunkId chunkId,
         CancellationToken cancellationToken = default)
     {
         return await recordingChunkRepo.GetSubsequentRecordingChunksAsync(chunkId, cancellationToken);
+    }
+
+    public async Task<bool> IsChunksReadyForConsolidationAsync(RecordingId recordingId, CancellationToken cancellationToken)
+    {
+        var result = await recordingRepo.IsRecordingCompletedAsync(recordingId, cancellationToken);
+        if (result) 
+            return await recordingChunkRepo.IsChunksTranscriptCompletedAsync(recordingId, cancellationToken);
+        else 
+            return false;
     }
 
     public async Task<bool> SaveRecordingChunkAsync(RecordingChunk recordingChunk, CancellationToken cancellationToken = default)

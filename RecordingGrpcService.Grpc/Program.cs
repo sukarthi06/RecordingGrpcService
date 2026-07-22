@@ -1,3 +1,4 @@
+using Google.Protobuf.WellKnownTypes;
 using RecordingGrpcService.Application.RepoServices;
 using RecordingGrpcService.Application.Services;
 using RecordingGrpcService.Grpc.Common;
@@ -10,7 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Program.cs
 builder.Services.AddGrpc(options => options.Interceptors.Add<ExceptionInterceptor>());
-builder.Services.AddGrpcReflection();
 
 builder.Host.AddHostInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -20,6 +20,11 @@ builder.Services.AddSingleton<RecordingChunkMapper>();
 
 builder.Services.AddScoped<IRecordingService, RecordingService>();
 builder.Services.AddScoped<IRecordingChunkService, RecordingChunkService>();
+
+if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local"))
+{
+    builder.Services.AddGrpcReflection();
+}
 
 var app = builder.Build();
 

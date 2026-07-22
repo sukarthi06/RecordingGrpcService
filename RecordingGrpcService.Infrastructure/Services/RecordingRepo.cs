@@ -11,7 +11,7 @@ public class RecordingRepo(
     ApplicationDbContext dbContext,
     ILogger<RecordingRepo> logger) : IRecordingRepo
 {
-    public Task<RecordingSession?> GetRecordingSessionAsync(RecordingId recordingId, CancellationToken cancellationToken = default)
+    public Task<RecordingSession?> GetRecordingSessionAsync(RecordingId recordingId, CancellationToken cancellationToken)
     {
         var recordingSession = dbContext.RecordingSessions            
             .Include(rs => rs.RecordingMetadata)
@@ -21,7 +21,7 @@ public class RecordingRepo(
     }
 
     public async Task<RecordingSession> SaveRecordingSessionAsync(RecordingSession recordingSession,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         await dbContext.RecordingSessions.AddAsync(recordingSession, cancellationToken);
         var result = await dbContext.SaveChangesAsync(cancellationToken);
@@ -33,7 +33,7 @@ public class RecordingRepo(
 
         return recordingSession;
     }
-    public async Task<bool> UpdateRecordingSessionAsync(RecordingSession recordingSession, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateRecordingSessionAsync(RecordingSession recordingSession, CancellationToken cancellationToken)
     {
         var existingSession = await dbContext.RecordingSessions.FindAsync(recordingSession.RecordingId, cancellationToken);
         if (existingSession == null)
@@ -62,7 +62,7 @@ public class RecordingRepo(
     }
 
     public async Task<bool> UpdateRecordingMetadataAsync(RecordingId recordingId, RecordingMetadata metadata,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         var recordingSession = await dbContext.RecordingSessions.FindAsync(recordingId, cancellationToken);
         if (recordingSession == null)
@@ -109,7 +109,7 @@ public class RecordingRepo(
         return true;
     }
 
-    public async Task<bool> UpdateWavPathAsync(RecordingId recordingId, string wavPath, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateWavPathAsync(RecordingId recordingId, string wavPath, CancellationToken cancellationToken)
     {
         var recordingSession = await dbContext.RecordingSessions
             .FirstOrDefaultAsync(rs => rs.RecordingId == recordingId, cancellationToken);
@@ -130,6 +130,39 @@ public class RecordingRepo(
             return false;
         }
         logger.LogInformation("Wav path updated for RecordingId: {RecordingId} in database", recordingId);
+        return true;
+    }
+
+    public async Task<bool> IsRecordingCompletedAsync(RecordingId recordingId, CancellationToken cancellationToken)
+    {
+        var result = await dbContext.RecordingSessions
+            .AsNoTracking()            
+            .Where(rs => rs.RecordingId == recordingId && rs.Status == RecordingStatus.Completed)            
+            .CountAsync(cancellationToken);
+        return result == 1;
+    }
+
+    public async Task<bool> UpdateTranscriptPathAsync(RecordingId recordingId, string transcriptPath, CancellationToken cancellationToken)
+    {
+        var recordingSession = await dbContext.RecordingSessions
+            .FirstOrDefaultAsync(rs => rs.RecordingId == recordingId, cancellationToken);
+
+        if (recordingSession == null)
+        {
+            logger.LogWarning("Recording session not found for RecordingId: {RecordingId} in database while updating transcript path",
+                recordingId);
+            return false;
+        }
+
+        recordingSession.TranscriptPath = transcriptPath;
+        recordingSession.LastModifiedAt = DateTime.UtcNow;
+        var result = await dbContext.SaveChangesAsync(cancellationToken);
+        if (result == 0)
+        {
+            logger.LogWarning("Failed to update transcript path for RecordingId: {RecordingId} in database", recordingId);
+            return false;
+        }
+        logger.LogInformation("Transcript path updated for RecordingId: {RecordingId} in database", recordingId);
         return true;
     }
 }

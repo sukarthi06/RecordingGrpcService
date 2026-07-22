@@ -11,4 +11,6 @@ public interface IRecordingRepo
     Task<bool> UpdateRecordingMetadataAsync(RecordingId recordingId, RecordingMetadata metadata,CancellationToken cancellationToken);
     Task<bool> UpdateRecordingSessionAsync(RecordingSession recordingSession, CancellationToken cancellationToken);
     Task<bool> UpdateWavPathAsync(RecordingId recordingId, string wavPath, CancellationToken cancellationToken);
+    Task<bool> UpdateTranscriptPathAsync(RecordingId recordingId, string transcriptPath, CancellationToken cancellationToken);
+    Task<bool> IsRecordingCompletedAsync(RecordingId recordingId, CancellationToken cancellationToken);
 }

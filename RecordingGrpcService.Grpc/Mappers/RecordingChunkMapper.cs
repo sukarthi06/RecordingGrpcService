@@ -1,7 +1,8 @@
-using Riok.Mapperly.Abstractions;
+using Google.Protobuf.WellKnownTypes;
 using RecordingGrpcService.Domain.Entities;
 using RecordingGrpcService.Domain.ValueObjects;
 using RecordingGrpcService.Grpc.Protos;
+using Riok.Mapperly.Abstractions;
 
 namespace RecordingGrpcService.Grpc.Mappers;
 
@@ -14,8 +15,6 @@ public partial class RecordingChunkMapper : MapperBase
     [MapperIgnoreTarget(nameof(RecordingChunk.LastModifiedAt))]
     [MapperIgnoreTarget(nameof(RecordingChunk.LastModifiedBy))]
     [MapperIgnoreTarget(nameof(RecordingChunk.RecordStatus))]
-    [MapperIgnoreSource(nameof(RecordingChunkDto.HasWavPath))]
-    [MapperIgnoreSource(nameof(RecordingChunkDto.HasTranscriptPath))]
     public partial RecordingChunk ToDomain(RecordingChunkDto dto);
 
     [MapperIgnoreSource(nameof(RecordingChunk.CreatedAt))]
@@ -34,6 +33,6 @@ public partial class RecordingChunkMapper : MapperBase
     private string MapChunkId(ChunkId id) => id.Value.ToString();
 
     // ---- RecordingId (string <-> value object) ----
-    private RecordingId MapRecordingId(string id) => RecordingId.Of(ParseGuid(id));
+    public RecordingId MapRecordingId(string id) => RecordingId.Of(ParseGuid(id));
     private string MapRecordingId(RecordingId id) => id.Value.ToString();
 }

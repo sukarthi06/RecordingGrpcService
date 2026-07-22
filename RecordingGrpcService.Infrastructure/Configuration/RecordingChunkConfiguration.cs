@@ -31,6 +31,18 @@ public sealed class RecordingChunkConfiguration
             .IsRequired()
             .HasMaxLength(500);
 
+        builder.Property(x => x.StartTime)
+            .HasDefaultValue(TimeSpan.Zero)
+            .IsRequired();
+
+        builder.Property(x => x.EndTime)
+            .HasDefaultValue(TimeSpan.Zero)
+            .IsRequired();
+
+        builder.Property(x => x.ChunkDuration)
+            .HasDefaultValue(0)
+            .IsRequired();
+
         builder.Property(x => x.WavPath)
             .HasMaxLength(500);
 

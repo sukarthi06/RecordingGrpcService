@@ -66,4 +66,11 @@ public class RecordingsService(
         var result = await recordingService.GetRecordingMetadataAsync(recordingId, context.CancellationToken);
         return new GetRecordingMetadataResponse { Metadata = mapper.ToDto(result) };
     }
+    public override async Task<UpdateTranscriptPathResponse> UpdateTranscriptPath(UpdateTranscriptPathRequest request,
+        ServerCallContext context)
+    {
+        var recordingId = mapper.MapRecordingId(request.RecordingId);
+        var response = await recordingService.UpdateTranscriptPathAsync(recordingId, request.TranscriptPath, context.CancellationToken);
+        return new UpdateTranscriptPathResponse { IsSuccess = response };
+    }
 }

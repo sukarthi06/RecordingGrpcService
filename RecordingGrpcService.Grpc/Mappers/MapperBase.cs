@@ -12,6 +12,9 @@ public abstract class MapperBase
     protected Timestamp? MapNullableTimestamp(DateTime? dt) =>
         dt.HasValue ? Timestamp.FromDateTime(DateTime.SpecifyKind(dt.Value, DateTimeKind.Utc)) : null;
 
+    protected static Duration MapTimeSpanToDuration(TimeSpan value) => Duration.FromTimeSpan(value);
+    protected static TimeSpan MapDurationToTimeSpan(Duration value) => value.ToTimeSpan();
+
     protected Guid ParseGuid(string id)
     {
         if (!Guid.TryParse(id, out var guid))
