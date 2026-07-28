@@ -1,4 +1,3 @@
-using Google.Protobuf.WellKnownTypes;
 using RecordingGrpcService.Application.RepoServices;
 using RecordingGrpcService.Application.Services;
 using RecordingGrpcService.Grpc.Common;

@@ -73,4 +73,11 @@ public class RecordingsService(
         var response = await recordingService.UpdateTranscriptPathAsync(recordingId, request.TranscriptPath, context.CancellationToken);
         return new UpdateTranscriptPathResponse { IsSuccess = response };
     }
+    public override async Task<GetTranscriptPathResponse> GetTranscriptPath(GetTranscriptPathRequest request, ServerCallContext context)
+    {
+        var recordingId = mapper.MapRecordingId(request.RecordingId);
+        var response = await recordingService.GetRecordingSessionAsync(recordingId, context.CancellationToken);
+        var transcriptPath = response is not null ? response.TranscriptPath : string.Empty;
+        return new GetTranscriptPathResponse { TranscriptPath = transcriptPath };
+    }
 }
