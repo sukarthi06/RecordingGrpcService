@@ -4,6 +4,7 @@ using RecordingGrpcService.Grpc.Common;
 using RecordingGrpcService.Grpc.Mappers;
 using RecordingGrpcService.Grpc.Services;
 using RecordingGrpcService.Infrastructure;
+using RecordingGrpcService.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,8 @@ if(app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Local"))
 {
     app.MapGrpcReflectionService();
 }
+
+await app.Services.InitialiseDatabaseAsync();
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<RecordingsService>();

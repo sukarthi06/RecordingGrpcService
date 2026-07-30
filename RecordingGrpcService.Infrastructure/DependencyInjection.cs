@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RecordingGrpcService.Infrastructure.Extensions;
 using RecordingGrpcService.Infrastructure.Interfaces;
 using RecordingGrpcService.Infrastructure.Services;
 using Serilog;
@@ -10,7 +11,7 @@ namespace RecordingGrpcService.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(
+    public static async Task<IServiceCollection> AddInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration)    
     {
