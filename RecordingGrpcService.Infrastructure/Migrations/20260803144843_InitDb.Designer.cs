@@ -12,15 +12,15 @@ using RecordingGrpcService.Infrastructure;
 namespace RecordingGrpcService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260714205115_ChunkWavPath")]
-    partial class ChunkWavPath
+    [Migration("20260803144843_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.9")
+                .HasAnnotation("ProductVersion", "10.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -30,11 +30,21 @@ namespace RecordingGrpcService.Infrastructure.Migrations
                     b.Property<Guid>("ChunkId")
                         .HasColumnType("uuid");
 
+                    b.Property<double>("ChunkDuration")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double precision")
+                        .HasDefaultValue(0.0);
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("interval")
+                        .HasDefaultValue(new TimeSpan(0, 0, 0, 0, 0));
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
@@ -51,8 +61,17 @@ namespace RecordingGrpcService.Infrastructure.Migrations
                     b.Property<int>("SequenceNumber")
                         .HasColumnType("integer");
 
+                    b.Property<TimeSpan>("StartTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("interval")
+                        .HasDefaultValue(new TimeSpan(0, 0, 0, 0, 0));
+
                     b.Property<string>("StoragePath")
                         .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("TranscriptPath")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
@@ -95,6 +114,10 @@ namespace RecordingGrpcService.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("StoragePath")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("TranscriptPath")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 

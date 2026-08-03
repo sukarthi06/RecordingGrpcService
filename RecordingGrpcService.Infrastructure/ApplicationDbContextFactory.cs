@@ -18,6 +18,7 @@ public class ApplicationDbContextFactory
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../RecordingGrpcService.Grpc"))
             .AddJsonFile("appsettings.json", optional: false)
             .AddJsonFile($"appsettings.{environment}.json", optional: true)
+            .AddJsonFile("appsettings.Local.json", optional: true)
             .AddEnvironmentVariables()
             .Build();
 

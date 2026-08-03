@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc(options => options.Interceptors.Add<ExceptionInterceptor>());
 
 builder.Host.AddHostInfrastructure(builder.Configuration);
-builder.Services.AddInfrastructure(builder.Configuration);
+await builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddSingleton<RecordingMapper>();
 builder.Services.AddSingleton<RecordingChunkMapper>();
