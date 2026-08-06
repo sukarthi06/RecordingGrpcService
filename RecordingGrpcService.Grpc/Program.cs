@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Program.cs
 builder.Services.AddGrpc(options => options.Interceptors.Add<ExceptionInterceptor>());
 
+builder.WebHost.AddWebHostInfrastructure();
 builder.Host.AddHostInfrastructure(builder.Configuration);
 await builder.Services.AddInfrastructure(builder.Configuration);
 
