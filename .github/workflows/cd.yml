@@ -21,7 +21,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy Recording Grpc Service to Azure App Service
+    name: Deploy to Azure App Service
     if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:

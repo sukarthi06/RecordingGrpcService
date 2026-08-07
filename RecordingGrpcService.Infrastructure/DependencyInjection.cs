@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,29 +41,16 @@ public static class DependencyInjection
         return services;
     }
 
-    public static void AddHostInfrastructure(        
+    public static void AddHostInfrastructure(
         this IHostBuilder hostBuilder,
         IConfiguration configuration)
-    {        
+    {
         hostBuilder.UseSerilog((context, services, loggerConfiguration) =>
         {
             loggerConfiguration
                 .ReadFrom.Configuration(configuration)
                 .ReadFrom.Services(services)
                 .Enrich.FromLogContext();
-        });
-    }
-
-    public static void AddWebHostInfrastructure(
-        this IWebHostBuilder webHostBuilder)
-    {
-        //To accept both HTTP/1.1 (for the plain GET / landing page) and HTTP/2 (for gRPC) on the same port.
-        webHostBuilder.ConfigureKestrel(options =>
-        {
-            options.ConfigureEndpointDefaults(listenOptions =>
-            {
-                listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
-            });
         });
     }
 }
