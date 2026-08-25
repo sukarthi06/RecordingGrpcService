@@ -17,7 +17,7 @@ namespace RecordingGrpcService.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.10")
+                .HasAnnotation("ProductVersion", "10.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -37,6 +37,10 @@ namespace RecordingGrpcService.Infrastructure.Migrations
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("DiarizationPath")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<TimeSpan>("EndTime")
                         .ValueGeneratedOnAdd()

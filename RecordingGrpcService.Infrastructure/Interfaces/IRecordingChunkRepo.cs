@@ -12,5 +12,7 @@ public interface IRecordingChunkRepo
     Task<List<RecordingChunk>?> GetRecordingChunksAsync(RecordingId recording, CancellationToken cancellationToken);
     Task<bool> UpdateWavPathAsync(ChunkId chunkId, string wavStoragePath, CancellationToken cancellationToken);
     Task<bool> UpdateTranscriptPathAsync(ChunkId chunkId, string transcriptStoragePath, CancellationToken cancellationToken);
+    Task<bool> UpdateDiarizationPathAsync(ChunkId chunkId, string diarizationStoragePath, CancellationToken cancellationToken);
     Task<bool> IsChunksTranscriptCompletedAsync(RecordingId recordingId, CancellationToken cancellationToken);
+    Task<bool> IsChunksDiarizationCompletedAsync(RecordingId recordingId, CancellationToken cancellationToken);
 }

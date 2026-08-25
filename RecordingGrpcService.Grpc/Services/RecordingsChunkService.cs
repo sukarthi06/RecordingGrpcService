@@ -62,7 +62,7 @@ public class RecordingsChunkService(
     {        
         var chunkId = mapper.MapChunkId(request.ChunkId);
         var transcriptStoragePath = request.TranscriptPath;
-        var response = await recordingChunkService.UpdateTranscriptPath(chunkId, transcriptStoragePath, context.CancellationToken);
+        var response = await recordingChunkService.UpdateTranscriptPathAsync(chunkId, transcriptStoragePath, context.CancellationToken);
         return new UpdateRecordingChunkTranscriptPathResponse { IsSuccess = response };
     }
     public override async Task<IsChunksReadyResponse> IsChunksReadyForConsolidation(
@@ -71,6 +71,13 @@ public class RecordingsChunkService(
         var response = await recordingChunkService
             .IsChunksReadyForConsolidationAsync(mapper.MapRecordingId(request.RecordingId), context.CancellationToken);
         return new IsChunksReadyResponse { IsSuccess = response };
+    }
+    public override async Task<IsChunksDiarizationReadyResponse> IsChunksReadyForConsolidateDiarization(
+        IsChunksDiarizationReadyRequest request, ServerCallContext context)
+    {
+        var response = await recordingChunkService
+            .IsChunksReadyForConsolidateDiarizationAsync(mapper.MapRecordingId(request.RecordingId), context.CancellationToken);
+        return new IsChunksDiarizationReadyResponse { IsSuccess = response };
     }
     public override async Task<GetRecordingChunksResponse> GetRecordingChunks(GetRecordingChunksRequest request,
         ServerCallContext context)
@@ -82,5 +89,13 @@ public class RecordingsChunkService(
         if (chunks is not null) response.RecordingChunks.AddRange(mapper.ToDtoList(chunks));
 
         return response;
+    }
+    public override async Task<UpdateRecordingChunkDiarizationPathResponse> UpdateRecordingChunkDiarizationPath(
+        UpdateRecordingChunkDiarizationPathRequest request, ServerCallContext context)
+    {
+        var chunkId = mapper.MapChunkId(request.ChunkId);
+        var diarizationStoragePath = request.DiarizationPath;
+        var response = await recordingChunkService.UpdateDiarizationPathAsync(chunkId, diarizationStoragePath, context.CancellationToken);
+        return new UpdateRecordingChunkDiarizationPathResponse { IsSuccess = response };
     }
 }

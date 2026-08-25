@@ -1,4 +1,3 @@
-using Google.Protobuf.WellKnownTypes;
 using RecordingGrpcService.Domain.Entities;
 using RecordingGrpcService.Domain.ValueObjects;
 using RecordingGrpcService.Grpc.Protos;

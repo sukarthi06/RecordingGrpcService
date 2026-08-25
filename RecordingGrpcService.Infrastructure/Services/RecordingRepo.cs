@@ -4,6 +4,7 @@ using RecordingGrpcService.Domain.Entities;
 using RecordingGrpcService.Domain.Enums;
 using RecordingGrpcService.Domain.ValueObjects;
 using RecordingGrpcService.Infrastructure.Interfaces;
+using System.Diagnostics;
 
 namespace RecordingGrpcService.Infrastructure.Services;
 
@@ -11,9 +12,13 @@ public class RecordingRepo(
     ApplicationDbContext dbContext,
     ILogger<RecordingRepo> logger) : IRecordingRepo
 {
-    public Task<RecordingSession?> GetRecordingSessionAsync(RecordingId recordingId, CancellationToken cancellationToken)
+    private static readonly ActivitySource ActivitySource = new("RecordingGrpcService.Repository");
+
+    public async Task<RecordingSession?> GetRecordingSessionAsync(RecordingId recordingId, CancellationToken cancellationToken)
     {
-        var recordingSession = dbContext.RecordingSessions            
+        using var activity = ActivitySource.StartActivity(nameof(GetRecordingSessionAsync));
+
+        var recordingSession = await dbContext.RecordingSessions            
             .Include(rs => rs.RecordingMetadata)
             .AsNoTracking()
             .FirstOrDefaultAsync(rs => rs.RecordingId == recordingId, cancellationToken);
@@ -23,6 +28,8 @@ public class RecordingRepo(
     public async Task<RecordingSession> SaveRecordingSessionAsync(RecordingSession recordingSession,
         CancellationToken cancellationToken)
     {
+        using var activity = ActivitySource.StartActivity(nameof(SaveRecordingSessionAsync));
+
         await dbContext.RecordingSessions.AddAsync(recordingSession, cancellationToken);
         var result = await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -33,8 +40,11 @@ public class RecordingRepo(
 
         return recordingSession;
     }
+
     public async Task<bool> UpdateRecordingSessionAsync(RecordingSession recordingSession, CancellationToken cancellationToken)
     {
+        using var activity = ActivitySource.StartActivity(nameof(UpdateRecordingSessionAsync));
+
         var existingSession = await dbContext.RecordingSessions.FindAsync(recordingSession.RecordingId, cancellationToken);
         if (existingSession == null)
         {
@@ -64,6 +74,8 @@ public class RecordingRepo(
     public async Task<bool> UpdateRecordingMetadataAsync(RecordingId recordingId, RecordingMetadata metadata,
         CancellationToken cancellationToken)
     {
+        using var activity = ActivitySource.StartActivity(nameof(UpdateRecordingMetadataAsync));
+
         var recordingSession = await dbContext.RecordingSessions.FindAsync(recordingId, cancellationToken);
         if (recordingSession == null)
         {
@@ -87,6 +99,8 @@ public class RecordingRepo(
     public async Task<bool> UpdateStoragePathAsync(RecordingId recordingId, string storagePath,
         CancellationToken cancellationToken = default)
     {
+        using var activity = ActivitySource.StartActivity(nameof(UpdateStoragePathAsync));
+
         var recordingSession = await dbContext.RecordingSessions
             .FirstOrDefaultAsync(rs => rs.RecordingId == recordingId, cancellationToken);
         if (recordingSession == null)
@@ -111,6 +125,8 @@ public class RecordingRepo(
 
     public async Task<bool> UpdateWavPathAsync(RecordingId recordingId, string wavPath, CancellationToken cancellationToken)
     {
+        using var activity = ActivitySource.StartActivity(nameof(UpdateWavPathAsync));
+
         var recordingSession = await dbContext.RecordingSessions
             .FirstOrDefaultAsync(rs => rs.RecordingId == recordingId, cancellationToken);
 
@@ -135,6 +151,8 @@ public class RecordingRepo(
 
     public async Task<bool> IsRecordingCompletedAsync(RecordingId recordingId, CancellationToken cancellationToken)
     {
+        using var activity = ActivitySource.StartActivity(nameof(IsRecordingCompletedAsync));
+
         var result = await dbContext.RecordingSessions
             .AsNoTracking()            
             .Where(rs => rs.RecordingId == recordingId && rs.Status == RecordingStatus.Completed)            
@@ -144,6 +162,8 @@ public class RecordingRepo(
 
     public async Task<bool> UpdateTranscriptPathAsync(RecordingId recordingId, string transcriptPath, CancellationToken cancellationToken)
     {
+        using var activity = ActivitySource.StartActivity(nameof(UpdateTranscriptPathAsync));
+
         var recordingSession = await dbContext.RecordingSessions
             .FirstOrDefaultAsync(rs => rs.RecordingId == recordingId, cancellationToken);
 

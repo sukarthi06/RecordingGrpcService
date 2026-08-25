@@ -10,7 +10,9 @@ public interface IRecordingChunkService
     Task<bool> UpdateStoragePathAsync(ChunkId chunkId, string storagePath, CancellationToken cancellationToken);
     Task<List<RecordingChunk>> GetSubsequentRecordingChunksAsync(ChunkId chunkId, CancellationToken cancellationToken);
     Task<bool> UpdateWavPathAsync(ChunkId chunkId, string wavStoragePath, CancellationToken cancellationToken);
-    Task<bool> UpdateTranscriptPath(ChunkId chunkId, string transcriptStoragePath, CancellationToken cancellationToken);
+    Task<bool> UpdateTranscriptPathAsync(ChunkId chunkId, string transcriptStoragePath, CancellationToken cancellationToken);
+    Task<bool> UpdateDiarizationPathAsync(ChunkId chunkId, string diarizationStoragePath, CancellationToken cancellationToken);
     Task<bool> IsChunksReadyForConsolidationAsync(RecordingId recordingId, CancellationToken cancellationToken);
+    Task<bool> IsChunksReadyForConsolidateDiarizationAsync(RecordingId recordingId, CancellationToken cancellationToken);
     Task<List<RecordingChunk>> GetRecordingChunksAsync(RecordingId recording, CancellationToken cancellationToken);
 }

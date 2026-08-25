@@ -14,6 +14,7 @@ builder.Services.AddGrpc(options => options.Interceptors.Add<ExceptionIntercepto
 
 builder.Host.AddHostInfrastructure(builder.Configuration);
 await builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddObservability(builder.Configuration);
 
 builder.Services.AddSingleton<RecordingMapper>();
 builder.Services.AddSingleton<RecordingChunkMapper>();

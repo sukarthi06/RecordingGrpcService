@@ -11,7 +11,7 @@ public class RecordingChunkService(
     IRecordingRepo recordingRepo,
     ILogger<RecordingChunkService> logger) : IRecordingChunkService
 {
-    public async Task<RecordingChunk?> GetRecordingChunkAsync(ChunkId chunkId, CancellationToken cancellationToken = default)
+    public async Task<RecordingChunk?> GetRecordingChunkAsync(ChunkId chunkId, CancellationToken cancellationToken)
     {
         if(ChunkId.Empty(chunkId.Value))
         {
@@ -43,17 +43,38 @@ public class RecordingChunkService(
             return false;
     }
 
-    public async Task<bool> SaveRecordingChunkAsync(RecordingChunk recordingChunk, CancellationToken cancellationToken = default)
+    public async Task<bool> IsChunksReadyForConsolidateDiarizationAsync(RecordingId recordingId, CancellationToken cancellationToken)
+    {
+        var result = await recordingRepo.IsRecordingCompletedAsync(recordingId, cancellationToken);
+        if (result)
+            return await recordingChunkRepo.IsChunksDiarizationCompletedAsync(recordingId, cancellationToken);
+        else
+            return false;
+    }
+
+    public async Task<bool> SaveRecordingChunkAsync(RecordingChunk recordingChunk, CancellationToken cancellationToken)
     {
         return await recordingChunkRepo.SaveRecordingChunkAsync(recordingChunk, cancellationToken);
     }
 
-    public async Task<bool> UpdateStoragePathAsync(ChunkId chunkId, string storagePath, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateDiarizationPathAsync(
+        ChunkId chunkId, string diarizationStoragePath, CancellationToken cancellationToken)
+    {
+        var response = await recordingChunkRepo.UpdateDiarizationPathAsync(chunkId, diarizationStoragePath, cancellationToken);
+        if (response)
+            logger.LogInformation("Diarization storage path updated for ChunkId: {ChunkId}", chunkId);
+        else
+            logger.LogInformation("Diarization storage path update failed for ChunkId: {ChunkId}", chunkId);
+        return response;
+    }
+
+    public async Task<bool> UpdateStoragePathAsync(ChunkId chunkId, string storagePath, CancellationToken cancellationToken)
     {
         return await recordingChunkRepo.UpdateStoragePathAsync(chunkId, storagePath, cancellationToken);
     }
 
-    public async Task<bool> UpdateTranscriptPath(ChunkId chunkId, string transcriptStoragePath, CancellationToken cancellationToken)
+    public async Task<bool> UpdateTranscriptPathAsync(
+        ChunkId chunkId, string transcriptStoragePath, CancellationToken cancellationToken)
     {
         var response = await recordingChunkRepo.UpdateTranscriptPathAsync(chunkId, transcriptStoragePath, cancellationToken);
         if (response)
