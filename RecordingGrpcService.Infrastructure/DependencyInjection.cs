@@ -106,7 +106,8 @@ public static class DependencyInjection
             .ConfigureResource(resource => resource
                 .AddService(serviceName: serviceName))
             .WithTracing(tracing => tracing
-                .AddAspNetCoreInstrumentation()
+                .AddAspNetCoreInstrumentation(options =>
+                    options.Filter = httpContext => httpContext.Request.Path != "/")
                 .AddHttpClientInstrumentation()
                 .AddSource("RecordingGrpcService.Repository")
                 .AddOtlpExporter(ConfigureExporter))
