@@ -3,4 +3,5 @@
   <Project Path="RecordingGrpcService.Domain/RecordingGrpcService.Domain.csproj" />
   <Project Path="RecordingGrpcService.Grpc/RecordingGrpcService.Grpc.csproj" />
   <Project Path="RecordingGrpcService.Infrastructure/RecordingGrpcService.Infrastructure.csproj" />
+  <Project Path="RecordingGrpcService.ServiceDefaults/RecordingGrpcService.ServiceDefaults.csproj" />
 </Solution>

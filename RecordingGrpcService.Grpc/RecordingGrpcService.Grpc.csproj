@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RecordingGrpcService.Application\RecordingGrpcService.Application.csproj" />
+    <ProjectReference Include="..\RecordingGrpcService.ServiceDefaults\RecordingGrpcService.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>
