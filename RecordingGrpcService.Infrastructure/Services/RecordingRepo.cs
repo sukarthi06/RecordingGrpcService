@@ -185,5 +185,31 @@ public class RecordingRepo(
         logger.LogInformation("Transcript path updated for RecordingId: {RecordingId} in database", recordingId);
         return true;
     }
+
+    public async Task<bool> UpdateDiarizationPathAsync(RecordingId recordingId, string diarizationPath, CancellationToken cancellationToken)
+    {
+        using var activity = ActivitySource.StartActivity(nameof(UpdateDiarizationPathAsync));
+
+        var recordingSession = await dbContext.RecordingSessions
+            .FirstOrDefaultAsync(rs => rs.RecordingId == recordingId, cancellationToken);
+
+        if (recordingSession == null)
+        {
+            logger.LogWarning("Recording session not found for RecordingId: {RecordingId} in database while updating diarization path",
+                recordingId);
+            return false;
+        }
+
+        recordingSession.DiarizationPath = diarizationPath;
+        recordingSession.LastModifiedAt = DateTime.UtcNow;
+        var result = await dbContext.SaveChangesAsync(cancellationToken);
+        if (result == 0)
+        {
+            logger.LogWarning("Failed to update diarization path for RecordingId: {RecordingId} in database", recordingId);
+            return false;
+        }
+        logger.LogInformation("Diarization path updated for RecordingId: {RecordingId} in database", recordingId);
+        return true;
+    }
 }
 

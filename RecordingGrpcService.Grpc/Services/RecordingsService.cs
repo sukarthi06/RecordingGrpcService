@@ -80,4 +80,13 @@ public class RecordingsService(
         var transcriptPath = response is not null ? response.TranscriptPath : string.Empty;
         return new GetTranscriptPathResponse { TranscriptPath = transcriptPath };
     }
+    public override async Task<UpdateDiarizationPathResponse> UpdateDiarizationPath(
+        UpdateDiarizationPathRequest request, ServerCallContext context)
+    {
+        var recordingId = mapper.MapRecordingId(request.RecordingId);
+        var response = await recordingService
+            .UpdateDiarizationPathAsync(recordingId, request.DiarizationPath, context.CancellationToken);
+        return new UpdateDiarizationPathResponse { IsSuccess = response };
+    }
+
 }

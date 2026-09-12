@@ -12,6 +12,7 @@ public class RecordingSession : Entity
     public DateTime? StoppedAt { get; set; }
     public string? StoragePath { get; set; }
     public string? WavPath { get; set; }
-    public string? TranscriptPath { get; set; }    
+    public string? TranscriptPath { get; set; }
+    public string? DiarizationPath { get; set; }
     public RecordingMetadata? RecordingMetadata { get; set; }
 }

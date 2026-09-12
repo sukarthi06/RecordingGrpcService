@@ -57,4 +57,9 @@ public class RecordingService(
     {
         return await recordingRepo.UpdateWavPathAsync(recordingId, wavPath, cancellationToken);
     }
+
+    public Task<bool> UpdateDiarizationPathAsync(RecordingId recordingId, string diarizationPath, CancellationToken cancellationToken)
+    {
+        return recordingRepo.UpdateDiarizationPathAsync(recordingId, diarizationPath, cancellationToken);
+    }
 }
