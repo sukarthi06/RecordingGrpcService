@@ -58,8 +58,13 @@ public class RecordingService(
         return await recordingRepo.UpdateWavPathAsync(recordingId, wavPath, cancellationToken);
     }
 
-    public Task<bool> UpdateDiarizationPathAsync(RecordingId recordingId, string diarizationPath, CancellationToken cancellationToken)
+    public async Task<bool> UpdateDiarizationPathAsync(RecordingId recordingId, string diarizationPath, CancellationToken cancellationToken)
     {
-        return recordingRepo.UpdateDiarizationPathAsync(recordingId, diarizationPath, cancellationToken);
+        return await recordingRepo.UpdateDiarizationPathAsync(recordingId, diarizationPath, cancellationToken);
+    }
+
+    public async Task<bool> IsDiarizedAsync(RecordingId recordingId, CancellationToken cancellationToken)
+    {
+        return await recordingRepo.IsDiarizedAsync(recordingId, cancellationToken);
     }
 }

@@ -14,4 +14,5 @@ public interface IRecordingRepo
     Task<bool> UpdateTranscriptPathAsync(RecordingId recordingId, string transcriptPath, CancellationToken cancellationToken);
     Task<bool> UpdateDiarizationPathAsync(RecordingId recordingId, string diarizationPath, CancellationToken cancellationToken);
     Task<bool> IsRecordingCompletedAsync(RecordingId recordingId, CancellationToken cancellationToken);
+    Task<bool> IsDiarizedAsync(RecordingId recordingId, CancellationToken cancellationToken);
 }

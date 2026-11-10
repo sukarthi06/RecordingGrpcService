@@ -211,5 +211,13 @@ public class RecordingRepo(
         logger.LogInformation("Diarization path updated for RecordingId: {RecordingId} in database", recordingId);
         return true;
     }
+
+    public async Task<bool> IsDiarizedAsync(RecordingId recordingId, CancellationToken cancellationToken)
+    {
+        var activity = ActivitySource.StartActivity(nameof(IsDiarizedAsync));
+        return await dbContext.RecordingSessions
+        .AsNoTracking()
+        .AnyAsync(rs => rs.RecordingId == recordingId && !string.IsNullOrEmpty(rs.DiarizationPath), cancellationToken);
+    }
 }
 

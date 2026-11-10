@@ -25,5 +25,8 @@ jobs:
       - name: Build
         run: dotnet build RecordingGrpcService.slnx -c Release --no-restore
 
-      - name: Build Docker image
+      - name: Build gRPC Docker image
         run: docker build -f RecordingGrpcService.Grpc/Dockerfile -t recordinggrpcservice:ci .
+
+      - name: Build API Docker image
+        run: docker build -f RecordingService.Api/Dockerfile -t recordingapi:ci .

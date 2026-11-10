@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Storage.Blobs;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -7,6 +8,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using RecordingGrpcService.Infrastructure.Interfaces;
+using RecordingGrpcService.Infrastructure.Options;
 using RecordingGrpcService.Infrastructure.Services;
 using Serilog;
 using Serilog.Sinks.OpenTelemetry;
@@ -41,6 +43,17 @@ public static class DependencyInjection
 
         services.AddScoped<IRecordingRepo, RecordingRepo>();
         services.AddScoped<IRecordingChunkRepo, RecordingChunkRepo>();
+
+        #region Blob
+
+        services.Configure<AzureBlobStorageOptions>(
+            configuration.GetSection(AzureBlobStorageOptions.SectionName));
+            services.AddSingleton(_ =>
+            new BlobServiceClient(configuration["Azure:StorageConnectionString"]));
+
+        services.AddSingleton<IBlobObjectStorage, AzureBlobObjectStorage>();
+
+        #endregion
 
         return services;
     }

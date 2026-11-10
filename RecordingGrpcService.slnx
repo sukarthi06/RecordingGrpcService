@@ -4,4 +4,5 @@
   <Project Path="RecordingGrpcService.Grpc/RecordingGrpcService.Grpc.csproj" />
   <Project Path="RecordingGrpcService.Infrastructure/RecordingGrpcService.Infrastructure.csproj" />
   <Project Path="RecordingGrpcService.ServiceDefaults/RecordingGrpcService.ServiceDefaults.csproj" />
+  <Project Path="RecordingService.Api/RecordingService.Api.csproj" Id="583cca30-7008-4aca-bbf8-1ef9de4d0298" />
 </Solution>

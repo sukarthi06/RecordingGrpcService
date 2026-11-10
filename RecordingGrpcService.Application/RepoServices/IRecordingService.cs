@@ -14,5 +14,6 @@ public interface IRecordingService
     Task<bool> UpdateWavPathAsync(RecordingId recordingId, string wavPath, CancellationToken cancellationToken);
     Task<bool> UpdateTranscriptPathAsync(RecordingId recordingId, string transcriptPath, CancellationToken cancellationToken);
     Task<bool> UpdateDiarizationPathAsync(RecordingId recordingId, string diarizationPath, CancellationToken cancellationToken);
-    Task<RecordingMetadata> GetRecordingMetadataAsync(RecordingId recordingId, CancellationToken cancellationToken);    
+    Task<RecordingMetadata> GetRecordingMetadataAsync(RecordingId recordingId, CancellationToken cancellationToken);
+    Task<bool> IsDiarizedAsync(RecordingId recordingId, CancellationToken cancellationToken);
 }

@@ -1,5 +1,4 @@
-using RecordingGrpcService.Application.RepoServices;
-using RecordingGrpcService.Application.Services;
+using RecordingGrpcService.Application;
 using RecordingGrpcService.Grpc.Common;
 using RecordingGrpcService.Grpc.Mappers;
 using RecordingGrpcService.Grpc.Services;
@@ -24,8 +23,7 @@ if (!builder.Environment.IsEnvironment("Local"))
 builder.Services.AddSingleton<RecordingMapper>();
 builder.Services.AddSingleton<RecordingChunkMapper>();
 
-builder.Services.AddScoped<IRecordingService, RecordingService>();
-builder.Services.AddScoped<IRecordingChunkService, RecordingChunkService>();
+builder.Services.AddApplication();
 
 if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local"))
 {
