@@ -104,7 +104,8 @@ public class RecordingChunkRepo(
         var result = await dbContext.RecordingChunks
             .AsNoTracking()
             .Where(rc => rc.RecordingId == recordingId
-                && (rc.DiarizationPath == null || rc.DiarizationPath == string.Empty)
+                && (rc.DiarizationPath == null || rc.DiarizationPath == string.Empty
+                    || rc.TranscriptPath == null || rc.TranscriptPath == string.Empty)
                 && rc.RecordStatus == 1)
             .CountAsync(cancellationToken);
         return result == 0;
